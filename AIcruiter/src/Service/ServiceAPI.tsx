@@ -7,7 +7,7 @@ interface ResponseData {
 }
 
 const Backendinstance = axios.create({
-    baseURL: 'http://localhost:8000/', // Base URL for the instance
+    baseURL:import.meta.env.VITE_BACKEND_URL, // Base URL for the instance
     // timeout: 1000, // Timeout for requests
  
   });
