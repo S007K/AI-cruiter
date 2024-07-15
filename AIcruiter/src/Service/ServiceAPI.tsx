@@ -1,6 +1,10 @@
-import { postInterviewType } from "@/types";
-import axios from "axios"
-
+// import { dataDatype, postInterviewType } from "@/types";
+import { dataDatype, saveFeedbackType, userDataType } from "@/types";
+import axios, { AxiosError } from "axios"
+interface ResponseData {
+  // Define the structure of your expected response data
+  data: string;
+}
 
 const Backendinstance = axios.create({
     baseURL: 'http://localhost:8000/', // Base URL for the instance
@@ -8,22 +12,67 @@ const Backendinstance = axios.create({
  
   });
 
+  axios.defaults.withCredentials = true;
 
-export async function saveUser(payload:string) {
+export async function saveUser(payload:userDataType) {
   try {
-    const response =await Backendinstance.post("/api/user", {  email: payload  })
-    return response.data.data
+    console.log(payload)
+    const response = await Backendinstance.post("/api/user", payload)
+    console.log(response)
+    return response.data
   }
   catch (error) {
-    console.log(error)
+    const err=error as AxiosError<ResponseData>
+    console.log(err.response?.data)
+    return err.response?.data
   }
 }
 
 
 
 
+export async function UserLogin(payload:{email:string,password:string}) {
+  try {
+    console.log(payload)
+    const response = await Backendinstance.post("/api/user/login", payload, {
+      withCredentials: true // Include credentials (cookies)
+  })
+    console.log(response)
+    return response.data
+  }
+  catch (error) {
+    const err=error as AxiosError<ResponseData>
+    console.log(err.response?.data)
+    return err.response?.data
+  }
+}
 
-export async function saveInterviewDetails(payload) {
+
+export async function authUser(payload:string) {
+  if (payload) {
+    // setToken(authToken);
+    // Optionally set axios defaults or perform other actions with the token
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${payload}`;
+    try {
+      const response = await Backendinstance.get("/api/user/auth", {
+        headers: {
+          'Authorization': `Bearer ${payload}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      return response
+    }
+    catch (error) {
+      const err=error as AxiosError<ResponseData>
+      console.log(err.response)
+      return err.response
+    }
+
+}
+}
+
+
+export async function saveInterviewDetails(payload:dataDatype) {
   try {
     console.log(payload)
     const interviewDetails = await Backendinstance.post('/api/interview', payload)
@@ -36,7 +85,7 @@ export async function saveInterviewDetails(payload) {
     }
 }
 
-export async function getInterviewDetails(payload) {
+export async function getInterviewDetails(payload:string) {
   try {
     
     const userDetails = await Backendinstance.get(`/api/interview/${payload}`)
@@ -50,7 +99,7 @@ export async function getInterviewDetails(payload) {
 }
 
 
-export async function updatesingleInterview(payload) {
+export async function updatesingleInterview(payload:{ interviewid:string,feedbackResponse:string}) {
   try {
     
     const interviewDetails = await Backendinstance.put(`/api/interview/singleinterview/${payload.interviewid}`,payload)
@@ -64,7 +113,7 @@ export async function updatesingleInterview(payload) {
 }
 
 
-export async function saveFeedback(payload) {
+export async function saveFeedback(payload:saveFeedbackType) {
   try {
     console.log(payload)
     const feedbackDetails = await Backendinstance.post('/api/feedback', payload)
