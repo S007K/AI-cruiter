@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/clerk-react";
+import UserContext from "@/Context/UserContext";
+
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { isSignedIn } = useUser()
+  const {user}=useContext(UserContext)
   const candidateFeatures = [{
     head: "Personalized Interview Feedback",
     value: `eceive instant, detailed feedback on performance to identify strengths and areas for improvement.`},
@@ -44,10 +46,10 @@ value: `Track your application status and progress through the hiring pipeline.`
     value: "Easily manage and filter the candidate pool to find the best fits for open positions."
   }
 ]
-
+  console.log(user)
   const navigate=useNavigate()
   function handleClick() {
-    if (!isSignedIn) {
+    if (!user.isLoggedIn) {
       navigate("/auth/sign-in")
     }
     else {
@@ -62,7 +64,7 @@ value: `Track your application status and progress through the hiring pipeline.`
           <h1 className="text-6xl mb-8 font-bold">AI-cruiter</h1>
           <p className="text-lg"> AI-based interview taker is here to revolutionize hiring—not by taking jobs, but by helping you land them. Recruiters can post job openings, and candidates can undergo AI-driven interviews designed to highlight their strengths and skills.</p>
           <div className="mt-4">
-          {isSignedIn?<Button onClick={handleClick} variant={"outline"}>Dashboard</Button>:<Button onClick={handleClick}>Signin</Button>}
+          {user.isLoggedIn?<Button onClick={handleClick} variant={"outline"}>Dashboard</Button>:<Button onClick={handleClick}>Signin</Button>}
 
           </div>
         </div>

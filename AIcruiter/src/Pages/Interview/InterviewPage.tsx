@@ -2,17 +2,17 @@ import { Button } from "@/components/ui/button";
 import Webcam from "react-webcam";
 
 import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Mic from "./Mic";
 import { Terminal } from "lucide-react";
-import { interviewAnswer } from "@/types";
+import { interviewAnswer, saveFeedbackType } from "@/types";
 import { GeminiAI } from "@/Utils/GeminiAI";
 import {  saveFeedback, updatesingleInterview } from "@/Service/ServiceAPI";
 import { toast } from "sonner";
 
 
-function seprategeminiResponse(data) {
+function seprategeminiResponse(data:string) {
  
   if (data) {
     const preprocessedData = data.split("```")
@@ -37,13 +37,13 @@ function seprategeminiResponse(data) {
 }
 
 const InterviewPage = () => {
-  let { interviewid } = useParams()
-  const navigate=useNavigate()
+  let { interviewid } = useParams<{ interviewid: string }>()
+  // const navigate=useNavigate()
   const location = useLocation();
   const [startInterview,setStartInterview]=useState(false)
-  const [arrayanswer, setArrayAnswers] = useState([])
+  const [arrayanswer, setArrayAnswers] = useState([{transcript:""}])
   const [geminiResponse,setGemeniResponse]=useState('')
-  const { formatedResponse, interviewData } = location.state || {};
+  const { formatedResponse} = location.state || {};
   const [questionNumber,setQusetionNumber]=useState(0)
  
   let feedbackAnswers:interviewAnswer[]=[]
@@ -69,17 +69,24 @@ I have given an interview the question answer are array of object where in objec
    const response = seprategeminiResponse(result)
    if (response) {
      
-     const dataToSend = {
+     if (interviewid) {
+     const dataToSend:saveFeedbackType = {
       interviewid: interviewid,
        ...response
      }
      console.log(geminiResponse)
      const feedbackResponse = await saveFeedback(dataToSend)
      //  const feedbackid= feedbackResponse._id
-    //  console.log(feedbackResponse)
-     const updateinterview =await updatesingleInterview({ interviewid,feedbackResponse:feedbackResponse.data })
-     console.log(updateinterview)
-     toast.success(updateinterview.message)
+     //  console.log(feedbackResponse)
+       
+       const updateinterview =await updatesingleInterview({ interviewid,feedbackResponse:feedbackResponse.data })
+       console.log(updateinterview)
+       toast.success(updateinterview.message)
+      }
+      else {
+       toast.success("interview Id not define")
+       
+     }
     //  navigate("/feedback-page/"+interviewid)
   }
   //  backend request
