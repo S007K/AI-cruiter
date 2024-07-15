@@ -47,17 +47,17 @@ router.post("/login",async (req, res) => {
                 const token = jwt.sign(userInfo, process.env.JWT_SECRETE_KEY, {
                     expiresIn:"24h"
                 })
-                console.log(token)
-                res.cookie("token", token, {
-                    expires: new Date(Date.now() + 24 * 60 * 60 * 60 * 1000),
-                    sameSite: "none",
-                    secure: true,
-                    withCredentials: true,             // Set to the backend domain or a common parent domain
+                // console.log(token)
+                // res.cookie("token", token, {
+                //     expires: new Date(Date.now() + 24 * 60 * 60 * 60 * 1000),
+                //     sameSite: "none",
+                //     secure: true,
+                //     withCredentials: true,             // Set to the backend domain or a common parent domain
                 
-                    path: '/'
-                })
+                //     path: '/'
+                // })
                 
-                res.send({result:"done",message:"user found",data:userInfo})
+                res.send({ result: "done", message: "user found", data: { ...userInfo, token } })
             }
             else {
                 throw {
