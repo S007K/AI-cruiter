@@ -52,7 +52,7 @@ router.post("/login",async (req, res) => {
                     expires: new Date(Date.now() + 24 * 60 * 60 * 60 * 1000),
                     sameSite: "None",
     secure: true,
-    domain: '.onrender.com', // Set to the backend domain or a common parent domain
+ // Set to the backend domain or a common parent domain
     path: '/'
                 })
                 
