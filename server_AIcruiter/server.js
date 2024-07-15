@@ -2,6 +2,7 @@ const express = require("express")
 const dotenv = require("dotenv")
 var cors = require('cors')
 const cookieParser = require('cookie-parser')
+dotenv.config()
 
 require("./dbconnect")
 
@@ -12,7 +13,6 @@ const interviewRoute=require("./controllers/interviewRoute")
 const userRoute=require("./controllers/userRoute")
 const feedbackRoute=require("./controllers/FeedbackRoute")
 
-dotenv.config()
 
 const app = express()
 

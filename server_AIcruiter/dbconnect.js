@@ -2,7 +2,7 @@
 const mongoose = require("mongoose")
 
 async function getdatabase() {
-    const url=process.env.DB_URL||"mongodb://127.0.0.1/AIcruiter"
+    const url = process.env.MONGODB_URL
     try {
         await mongoose.connect(url)
         console.log("database connected")

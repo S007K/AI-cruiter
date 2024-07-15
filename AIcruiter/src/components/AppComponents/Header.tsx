@@ -31,7 +31,7 @@ export default function Header() {
           <Link to={"/"}> <img src="./assets/Logo.png" className='w-[9rem]' alt="logo" /></Link>
           <div className='flex flex-row gap-4 items-center'>
 
-            {user.isLoggedIn?`wellcome ${user.firstName}!!`:""}
+            {user.isLoggedIn?`welcome ${user.firstName}!!`:""}
           
           {user.isLoggedIn ? <Link to="/dashboard" className='mr-4' ><Button variant={"outline"}>Dashboard</Button></Link> : ""} 
           {user.isLoggedIn ? <Button variant={"outline"} onClick={handleLogout}>LogOut</Button> : ""} 
