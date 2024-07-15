@@ -50,11 +50,11 @@ router.post("/login",async (req, res) => {
                 console.log(token)
                 res.cookie("token", token, {
                     expires: new Date(Date.now() + 24 * 60 * 60 * 60 * 1000),
-                    sameSite: "None",
-    secure: true,
-                    // Set to the backend domain or a common parent domain
-    domain:"localhost",
-    path: '/'
+                    sameSite: "Lax",
+                    secure: true,
+                                    // Set to the backend domain or a common parent domain
+                
+                    path: '/'
                 })
                 
                 res.send({result:"done",message:"user found",data:userInfo})
