@@ -100,7 +100,9 @@ export default function Dashboard() {
         toast.error("No Id found")
       }
     })();
+    console.log("token",Cookies.get("token"))
     if (!Cookies.get("token")) {
+
        navigate("/auth/sign-in");
     }
   }, []);

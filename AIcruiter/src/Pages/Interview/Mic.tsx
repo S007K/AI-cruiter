@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { interviewAnswer } from '@/types';
-import { useEffect, useState } from 'react';
-import useSpeechToText from 'react-hook-speech-to-text';
+// import {  transcript } from '@/types';
+
+import useSpeechToText, { ResultType } from 'react-hook-speech-to-text';
 import { toast } from 'sonner';
 
-const Mic = ({ question,questionNumber,arrayAnswer,setData }) => {
-  const [arrayanswer, setArrayAnswers] = useState<interviewAnswer[]>([])
+const Mic :React.FC<{ setData: (data: ResultType[]|string[]) => void }> = ({ setData }) => {
+  // const [arrayanswer, setArrayAnswers] = useState<interviewAnswer[]>([])
   const {
     error,
-    interimResult,
+ 
     isRecording,
     results,
     startSpeechToText,

@@ -9,19 +9,20 @@ CardTitle,
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import UserContext from "@/Context/UserContext"
-import UserContextProvider from "@/Context/UserContextProvider"
 import { saveUser } from "@/Service/ServiceAPI"
+import { userDataType } from "@/types"
 import { useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 const Signup = () => {
-  const {user,setUser}  =useContext(UserContext)
-  const [data, setData] = useState({
+  const {setUser}  =useContext(UserContext)
+  const [data, setData] = useState<userDataType>({
     firstName:"",
     lastName:"",
     email:"",
-    password:""
+    password: "",
+    role:"candidate"
   })
 
   const navigate=useNavigate()

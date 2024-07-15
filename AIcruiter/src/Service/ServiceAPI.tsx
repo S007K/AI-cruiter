@@ -1,6 +1,7 @@
 // import { dataDatype, postInterviewType } from "@/types";
 import { dataDatype, saveFeedbackType, userDataType } from "@/types";
 import axios, { AxiosError } from "axios"
+import Cookies from "js-cookie";
 interface ResponseData {
   // Define the structure of your expected response data
   data: string;
@@ -8,14 +9,16 @@ interface ResponseData {
 
 const Backendinstance = axios.create({
     baseURL:import.meta.env.VITE_BACKEND_URL, // Base URL for the instance
+    // baseURL:"http://localhost:8000", // Base URL for the instance
     // timeout: 1000, // Timeout for requests
  
   });
 
   axios.defaults.withCredentials = true;
-
-export async function saveUser(payload:userDataType) {
-  try {
+  
+  export async function saveUser(payload:userDataType) {
+    try {
+    
     console.log(payload)
     const response = await Backendinstance.post("/api/user", payload)
     console.log(response)
@@ -30,14 +33,19 @@ export async function saveUser(payload:userDataType) {
 
 
 
+axios.defaults.withCredentials = true;
 
 export async function UserLogin(payload:{email:string,password:string}) {
   try {
     console.log(payload)
+    console.log("vite",import.meta.env.VITE_BACKEND_URL)
     const response = await Backendinstance.post("/api/user/login", payload, {
       withCredentials: true // Include credentials (cookies)
   })
     console.log(response)
+    Cookies.set("token", response.data.data.token, {
+      expires: new Date(Date.now() + 24 * 60 * 60 * 60 * 1000),
+    })
     return response.data
   }
   catch (error) {

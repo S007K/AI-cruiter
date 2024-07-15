@@ -1,3 +1,5 @@
+import { ResultType } from "react-hook-speech-to-text";
+
 export interface questiontype{
     question: string;
     marks: number;
@@ -38,7 +40,7 @@ export interface postInterviewType{
 
 export interface interviewAnswer{
     question: string,
-    answer:string
+    answer:string|ResultType
 }
 
 export interface userDataType{
@@ -54,3 +56,7 @@ export interface saveFeedbackType{
       marks: number,
       generalFeedback:string|null
 }
+export interface transcript {
+    transcript: string;
+    // Add other properties as needed
+  }

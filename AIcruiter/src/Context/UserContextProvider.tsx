@@ -17,20 +17,20 @@ const UserContextProvider:React.FC<UserContextProviderProps> = ({children}) => {
   
   const cookies = new Cookies();
   useEffect(() => {
-    if (!user.firstName) {
+    if (user.firstName==="") {
       async function auth() {
        
         const authToken = cookies.get('token');
+        console.log("auth", authToken)
         if (authToken) {
           
           const response = await authUser(authToken)
-          console.log("auth", response)
           if (response?.status === 401) {
             setUser((prev) => { return { ...prev, isLoggedIn: false } })
             cookies.remove("token")
           }
           else {
-            if (response?.status === 200) {
+            if (response?.status === 200 && authToken) {
               setUser({...response.data.data, isLoggedIn:true })
             
           }

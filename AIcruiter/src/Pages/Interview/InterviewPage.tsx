@@ -6,10 +6,11 @@ import { useLocation, useParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Mic from "./Mic";
 import { Terminal } from "lucide-react";
-import { interviewAnswer, saveFeedbackType } from "@/types";
+import { interviewAnswer, saveFeedbackType} from "@/types";
 import { GeminiAI } from "@/Utils/GeminiAI";
 import {  saveFeedback, updatesingleInterview } from "@/Service/ServiceAPI";
 import { toast } from "sonner";
+import { ResultType } from "react-hook-speech-to-text";
 
 
 function seprategeminiResponse(data:string) {
@@ -41,7 +42,7 @@ const InterviewPage = () => {
   // const navigate=useNavigate()
   const location = useLocation();
   const [startInterview,setStartInterview]=useState(false)
-  const [arrayanswer, setArrayAnswers] = useState([{transcript:""}])
+  const [arrayanswer, setArrayAnswers] = useState<ResultType[]|string[]>([""])
   const [geminiResponse,setGemeniResponse]=useState('')
   const { formatedResponse} = location.state || {};
   const [questionNumber,setQusetionNumber]=useState(0)
@@ -53,7 +54,7 @@ const InterviewPage = () => {
       
       feedbackAnswers.push({
         question: formatedResponse[i].question,
-        answer:arrayanswer[i].transcript
+        answer:arrayanswer[i]
       })
     }
     
@@ -127,7 +128,11 @@ I have given an interview the question answer are array of object where in objec
           
           <div className=" flex flex-col justify-around bg-slate-800 w-[80%] h-[85%] rounded-md">
             <div className="p-4 m-auto w-[80%]"><Webcam mirrored={true} size={100} className="w-full " /> </div> 
-            <Mic question={formatedResponse[questionNumber].question} questionNumber={ questionNumber} arrayAnswer={arrayanswer} setData={setArrayAnswers} />
+            <Mic
+              // question={formatedResponse[questionNumber].question}
+              // questionNumber={questionNumber}
+              // arrayAnswer={arrayanswer}
+              setData={setArrayAnswers} />
             
           </div>
         </div>

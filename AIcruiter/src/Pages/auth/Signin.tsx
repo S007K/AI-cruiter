@@ -18,7 +18,10 @@ import { toast } from "sonner"
 export function Signin() {
 
   const {setUser}=useContext(UserContext)
-  const [data, setData] = useState({})
+  const [data, setData] = useState<{ email: string, password: string }>({
+    email: "",
+    password:""
+  })
   const navigate=useNavigate()
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
