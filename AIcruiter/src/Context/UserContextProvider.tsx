@@ -1,56 +1,54 @@
-import  { ReactNode, useEffect, useState } from 'react'
-import UserContext from './UserContext'
+import { ReactNode, useEffect, useState } from 'react';
+import UserContext from './UserContext';
 import Cookies from 'universal-cookie';
 import { authUser } from '@/Service/ServiceAPI';
 
 interface UserContextProviderProps {
   children: ReactNode;
 }
-const UserContextProvider:React.FC<UserContextProviderProps> = ({children}) => {
+
+const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) => {
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
     email: "",
     isLoggedIn: false,
-    _id:""
-  })
-  
+    _id: ""
+  });
+
   const cookies = new Cookies();
+
   useEffect(() => {
-    if (user.firstName==="") {
-      async function auth() {
-       
+    async function authenticateUser() {
+      try {
         const authToken = cookies.get('token');
-        console.log("auth", authToken)
         if (authToken) {
-          
-          const response = await authUser(authToken)
+          const response = await authUser(authToken);
           if (response?.status === 401) {
-            setUser((prev) => { return { ...prev, isLoggedIn: false } })
-            cookies.remove("token")
-          }
-          else {
-            if (response?.status === 200 && authToken) {
-              setUser({...response.data.data, isLoggedIn:true })
-            
-          }
+            setUser(prev => ({ ...prev, isLoggedIn: false }));
+            cookies.remove("token");
+          } else if (response?.status === 200) {
+            setUser({ ...response.data.data, isLoggedIn: true });
           }
         }
-      
+      } catch (error) {
+        console.error("Authentication error:", error);
       }
-       auth()
-      
-    }
-    else {
-      console.log("user",user)
     }
 
-}, []);
+    if (user.firstName === "") {
+      authenticateUser();
+    } else {
+      console.log("user", user);
+    }
+  }, [user, cookies]);
+
   return (
-      <UserContext.Provider value={{user,setUser}}>
-          {children}
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
 
-export default UserContextProvider
+export default UserContextProvider;
+
