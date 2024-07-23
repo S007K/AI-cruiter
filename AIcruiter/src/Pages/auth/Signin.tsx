@@ -36,17 +36,13 @@ export function Signin() {
   }
 
   const handleSubmit =async () =>{
-    
-      console.log(data)
       const response =await UserLogin(data)
-      console.log(response)
       if (response.result === "fail") {
         toast.error(response.message)
 
       }
       else {
         toast.success(response.message)
-        console.log(response)
         setUser({
           ...response.data,
           isLoggedIn:true
